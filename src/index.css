@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+
+@theme {
+    --bg-header:bg-(image<'./public/bg.jpg'>);
+    --color-primary: #1a202c;
+}
