@@ -15,18 +15,24 @@ function Header() {
 
     const fetchCategories = useAppStore((state) => state.fetchCategories);
     const categories = useAppStore((state) => state.categories);
+    const searchRecipes = useAppStore((state) => state.searchRecipes);
 
     useEffect(() => {
         fetchCategories();
     }, []); 
 
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
-        console.log('from handle change');
         
         setSearchFilters({
             ...searchFilters,
             [e.target.name]: e.target.value,
         })
+    }
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        
+        searchRecipes(searchFilters)
     }
 
   return (
@@ -65,7 +71,10 @@ function Header() {
 
             {
             isHome && 
-            <form className="p-10 my-32 space-y-6 bg-orange-400 rounded-lg">
+            <form 
+            className="p-10 my-32 space-y-6 bg-orange-400 rounded-lg"
+            onSubmit={handleSubmit}
+            >
                 
                     <div className="space-y-4">
                         <label 
@@ -83,11 +92,14 @@ function Header() {
                     </div>
 
                     <div className="space-y-4">
-                        <label htmlFor="input2" className="text-white font-bold uppercase">categoria</label>
+                        <label htmlFor="category" className="text-white font-bold uppercase">categoria</label>
                         <select 
-                        name="" 
-                        id="" 
-                        className="w-full mx-0 bg-white border-0 border-gray-300 rounded-lg p-3 focus:outline-none">
+                        name="category" 
+                        id="category" 
+                        className="w-full mx-0 bg-white border-0 border-gray-300 rounded-lg p-3 focus:outline-none"
+                        onChange={handleChange}
+                        value={searchFilters.category}
+                        >
                             <option value="">--seleccione--</option>
                             {categories.drinks.map((category) => (
                                 <option 
@@ -100,7 +112,8 @@ function Header() {
                     </div>
                 
                 <button 
-                className="w-full p-2 font-extrabold text-white uppercase bg-orange-800 rounded-lg cursor-pointer hover:bg-orange-900">
+                className="w-full p-2 font-extrabold text-white uppercase bg-orange-800 rounded-lg cursor-pointer hover:bg-orange-900"
+                >
                     buscar recetas
                 </button>
             </form>
