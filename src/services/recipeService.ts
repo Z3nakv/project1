@@ -1,6 +1,6 @@
 import axios from "axios";
-import { CategoriesResponseSchema, DrinksAPIResponse } from "../schemas";
-import type { SearchFilters } from "../types";
+import { CategoriesResponseSchema, DrinksAPIResponse, RecipeAPIResponseSchema } from "../schemas";
+import type { Drink, SearchFilters } from "../types";
 
 export async function getCategories () {
     
@@ -21,4 +21,15 @@ export async function getRecipes(filters: SearchFilters) {
         return result.data;
     }
     throw new Error('Failed to fetch drinks');
+}
+
+export async function getRecipeById(id: Drink['idDrink']) {
+    const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
+    const { data } = await axios(url);
+    const result = RecipeAPIResponseSchema.safeParse(data.drinks[0]);
+    if (result.success) {
+        return result.data;
+    }
+    throw new Error('Failed to fetch drink by ID');
+
 }
