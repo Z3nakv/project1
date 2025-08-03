@@ -7,7 +7,6 @@ function Modal() {
   const selectedRecipe = useAppStore((state) => state.selectedRecipe);
   const closeModal = useAppStore((state) => state.closeModal);
   const favoriteExists = useAppStore((state) => state.favoriteExists);
-  const favorites = useAppStore((state) => state.favorites);
   const handleClickFavorites = useAppStore((state) => state.handleClickFavorites);
 
   if (!selectedRecipe) return null;

@@ -17,7 +17,7 @@ const CardDrink = ({drink} : CardDrinkProps) => {
           alt={drink.strDrink} 
           className="w-full object-cover rounded-lg mb-2"
           />
-        <h2 className="text-3xl font-bold">{drink.strDrink}</h2>
+        <h2 className="text-3xl font-bold truncate">{drink.strDrink}</h2>
         <button 
         className="mt-2 bg-orange-500 text-white py-2 px-4 rounded w-full cursor-pointer hover:bg-orange-800 transition-colors"
         onClick={() => {
