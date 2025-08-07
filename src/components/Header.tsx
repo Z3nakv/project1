@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ChangeEvent } from "react";
+import { useMemo, useState, type ChangeEvent } from "react";
 import { NavLink, useLocation } from "react-router";
 import { useAppStore } from "../stores/useAppStore";
 
@@ -13,13 +13,10 @@ function Header() {
 
     const isHome = useMemo(() => pathname === '/', [pathname]);
 
-    const fetchCategories = useAppStore((state) => state.fetchCategories);
     const categories = useAppStore((state) => state.categories);
     const searchRecipes = useAppStore((state) => state.searchRecipes);
+    const showNotification = useAppStore((state) => state.showNotification);
 
-    useEffect(() => {
-        fetchCategories();
-    }, []); 
 
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
         
@@ -31,18 +28,25 @@ function Header() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
+        if(Object.values(searchFilters).includes('')) {
+            showNotification({
+                text: 'Debe ingresar un ingrediente y seleccionar una categoría',
+                error: true
+            });
+            return;
+        }
         searchRecipes(searchFilters)
     }
 
   return (
-    <header className={isHome ? "bg-[url('/public/bg.jpg')] bg-center bg-cover" : "bg-slate-800"}>
+    <header className={isHome ? "bg-[url('/bg.jpg')] bg-center bg-cover" : "bg-slate-800"}>
 
       <div className="container px-5 py-16 mx-auto" >
 
             <div className="flex justify-between items-center">
                 <div className="text-white">
-                    <img className="w-32" src="/public/logo.svg" alt="logo" />
+                    <img className="w-32" src="/logo.svg" alt="logo" />
                 </div>
                 
                 <nav className="flex space-x-4 text-white uppercase font-bold">
@@ -66,13 +70,23 @@ function Header() {
                     >
                         favoritos
                     </NavLink>
+                    <NavLink 
+                    to={'/generate'}
+                    className={({ isActive }) => 
+                    isActive 
+                    ? 'text-orange-500 uppercase font-bold' 
+                    : 'text-white uppercase font-bold'
+                    }
+                    >
+                        Generar con AI
+                    </NavLink>
                 </nav>
             </div>
 
             {
             isHome && 
             <form 
-            className="p-10 my-32 space-y-6 bg-orange-400 rounded-lg"
+            className="p-10 my-32 space-y-6 bg-orange-400 rounded-lg shadow md:w-1/2 2xl:w-1/3"
             onSubmit={handleSubmit}
             >
                 
@@ -98,7 +112,7 @@ function Header() {
                         id="category" 
                         className="w-full mx-0 bg-white border-0 border-gray-300 rounded-lg p-3 focus:outline-none"
                         onChange={handleChange}
-                        value={searchFilters.category}
+                        // value={searchFilters.category}
                         >
                             <option value="">--seleccione--</option>
                             {categories.drinks.map((category) => (

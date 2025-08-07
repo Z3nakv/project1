@@ -1,11 +1,9 @@
 import { Outlet } from "react-router-dom"
 import Header from "../components/Header"
-import { useAppStore } from "../stores/useAppStore"
 import Modal from "../components/Modal";
+import Notification from "../components/Notifcation";
 
 const Layout = () => {
-
-  const modal = useAppStore(state => state.modal);
 
   return (
     <>
@@ -15,11 +13,8 @@ const Layout = () => {
             <Outlet />
         </main>
 
-        {
-          modal && (
-            <Modal />
-          )
-        }
+        <Modal />
+        <Notification />
     </>
   )
 }
